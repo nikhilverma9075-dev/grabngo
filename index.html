@@ -9,53 +9,52 @@
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     header {
       background: #0c831f;
       color: white;
-      padding: 16px;
+      padding: 20px;
+      width: 100%;
+      text-align: center;
       font-size: 24px;
       font-weight: bold;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .tagline {
-      text-align: center;
-      margin: 6px 0 16px 0;
-      font-size: 14px;
+      margin: 10px 0 20px 0;
       color: #333;
+      font-size: 16px;
+      text-align: center;
     }
-    .container {
-      padding: 16px;
-    }
-    .store-card, .pickup-card, .info-card {
+    .card {
       background: white;
-      padding: 14px;
-      margin-bottom: 12px;
+      padding: 20px;
+      width: 90%;
+      max-width: 400px;
+      margin-bottom: 20px;
       border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-    .store-card h3, .pickup-card h3, .info-card h3 {
-      margin: 0 0 6px 0;
-      font-size: 18px;
-    }
-    .store-card p, .pickup-card p, .info-card p {
-      margin: 4px 0;
-      font-size: 14px;
-      color: #555;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      text-align: center;
     }
     button {
       background: #0c831f;
       color: white;
       border: none;
-      padding: 10px 14px;
+      padding: 12px 20px;
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
-      margin-top: 6px;
+      margin-top: 10px;
     }
-    .button-container {
-      text-align: right;
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -64,43 +63,53 @@
 <header>GrabNGo</header>
 <div class="tagline">Packed before you arrive</div>
 
-<div class="container">
-
-  <!-- Nearby Store Card -->
-  <div class="store-card">
-    <h3>Mrs. Sharma's Kirana</h3>
-    <p>Distance: 50 meters</p>
-    <p>Pickup in ~15 min</p>
-    <div class="button-container">
-      <button>Add Items</button>
-    </div>
-  </div>
-
-  <div class="store-card">
-    <h3>Shivaji Kirana Store</h3>
-    <p>Distance: 120 meters</p>
-    <p>Pickup in ~20 min</p>
-    <div class="button-container">
-      <button>Add Items</button>
-    </div>
-  </div>
-
-  <!-- Pickup Time Card -->
-  <div class="pickup-card">
-    <h3>Select Pickup Time</h3>
-    <p>Example: 5:00 PM</p>
-    <div class="button-container">
-      <button>Confirm Slot</button>
-    </div>
-  </div>
-
-  <!-- Info Card -->
-  <div class="info-card">
-    <h3>No Login. No OTP.</h3>
-    <p>Just enter your name and book your order. Quick & easy.</p>
-  </div>
-
+<div class="card">
+  <h3>Create Account as Shopkeeper</h3>
+  <input type="text" id="shopName" placeholder="Shop Name">
+  <input type="text" id="shopAddress" placeholder="Address">
+  <input type="text" id="shopMobile" placeholder="Mobile Number">
+  <button onclick="shopkeeperLogin()">Enter as Shopkeeper</button>
 </div>
+
+<div class="card">
+  <h3>Create Account as Customer</h3>
+  <input type="text" id="custName" placeholder="Your Name">
+  <input type="text" id="custAddress" placeholder="Address">
+  <input type="text" id="custMobile" placeholder="Mobile Number">
+  <button onclick="customerLogin()">Enter as Customer</button>
+</div>
+
+<script>
+function shopkeeperLogin() {
+  const name = document.getElementById('shopName').value;
+  const address = document.getElementById('shopAddress').value;
+  const mobile = document.getElementById('shopMobile').value;
+  if(name && address && mobile) {
+    localStorage.setItem('userType', 'shopkeeper');
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userAddress', address);
+    localStorage.setItem('userMobile', mobile);
+    window.location.href = 'shopkeeper-dashboard.html';
+  } else {
+    alert('Please fill all fields!');
+  }
+}
+
+function customerLogin() {
+  const name = document.getElementById('custName').value;
+  const address = document.getElementById('custAddress').value;
+  const mobile = document.getElementById('custMobile').value;
+  if(name && address && mobile) {
+    localStorage.setItem('userType', 'customer');
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userAddress', address);
+    localStorage.setItem('userMobile', mobile);
+    window.location.href = 'customer-home.html';
+  } else {
+    alert('Please fill all fields!');
+  }
+}
+</script>
 
 </body>
 </html>
