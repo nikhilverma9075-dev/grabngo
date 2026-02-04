@@ -1,101 +1,133 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GrabNGo – Shopkeeper</title>
+  <title>GrabNGo – Shopkeeper Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { margin:0; font-family: Arial, sans-serif; background:#f7f7f7; }
-    header { background:#0c831f; color:white; padding:16px; font-size:22px; text-align:center; }
-    .container { padding:16px; max-width:400px; margin:auto; }
-    input, button { width:100%; margin:6px 0; padding:10px; border-radius:6px; border:1px solid #ccc; }
-    button { background:#0c831f; color:white; border:none; cursor:pointer; }
-    h2 { text-align:center; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+    }
+    header {
+      background: #0c831f;
+      color: white;
+      padding: 16px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .container {
+      padding: 16px;
+    }
+    .card {
+      background: white;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input, button {
+      padding: 10px;
+      margin: 6px 0;
+      font-size: 14px;
+    }
+    button {
+      background: #0c831f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #addItemSection {
+      display: none;
+    }
   </style>
 </head>
 <body>
 <header>GrabNGo – Shopkeeper</header>
-
 <div class="container">
-  <h2>Register Shopkeeper</h2>
-  <input type="text" id="shopName" placeholder="Shop Name">
-  <input type="text" id="ownerName" placeholder="Owner Name">
-  <input type="text" id="mobile" placeholder="Mobile Number">
-  <button id="registerBtn">Register / Login</button>
+  <!-- Registration Section -->
+  <div class="card">
+    <h3>Register / Login</h3>
+    <input type="text" id="shopName" placeholder="Shop Name"><br>
+    <input type="text" id="ownerName" placeholder="Owner Name"><br>
+    <input type="text" id="mobile" placeholder="Mobile Number"><br>
+    <button id="registerBtn">Register / Login</button>
+  </div>
 
-  <div id="addItemSection" style="display:none; margin-top:20px;">
-    <h2>Add Items</h2>
-    <input type="text" id="itemName" placeholder="Item Name">
-    <input type="number" id="itemPrice" placeholder="Price">
-    <input type="number" id="itemQty" placeholder="Quantity">
-    <input type="text" id="itemPhoto" placeholder="Photo URL (optional)">
+  <!-- Add Item Section -->
+  <div class="card" id="addItemSection">
+    <h3>Add Item</h3>
+    <input type="text" id="itemName" placeholder="Item Name"><br>
+    <input type="number" id="itemPrice" placeholder="Price"><br>
+    <input type="number" id="itemQuantity" placeholder="Quantity"><br>
+    <input type="text" id="itemPhoto" placeholder="Image URL (optional)"><br>
     <button id="addItemBtn">Add Item</button>
-    <div id="status" style="margin-top:10px; color:green;"></div>
   </div>
 </div>
 
-<!-- Firebase -->
+<!-- Firebase Scripts -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getDatabase, ref, set, push, get, child } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+  import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDVicBX20W8dpR03nlRwLrqOscRS-s6l68",
     authDomain: "grabngo45n.firebaseapp.com",
+    databaseURL: "https://grabngo45n-default-rtdb.firebaseio.com",
     projectId: "grabngo45n",
-    storageBucket: "grabngo45n.firebasestorage.app",
+    storageBucket: "grabngo45n.appspot.com",
     messagingSenderId: "632627152888",
-    appId: "1:632627152888:web:cfa1db4ae7fb6d7a29b80d",
-    measurementId: "G-L0JVNV7XKG"
+    appId: "1:632627152888:web:cfa1db4ae7fb6d7a29b80d"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  let shopID = ""; // will store unique shop ID
+  let shopID = "";
 
   const registerBtn = document.getElementById("registerBtn");
-  registerBtn.addEventListener("click", async () => {
+  const addItemSection = document.getElementById("addItemSection");
+  const addItemBtn = document.getElementById("addItemBtn");
+
+  // --- Register / Login ---
+  registerBtn.addEventListener("click", async (e) => {
+    e.preventDefault(); // Prevent page refresh / 404
     const shopName = document.getElementById("shopName").value.trim();
     const ownerName = document.getElementById("ownerName").value.trim();
     const mobile = document.getElementById("mobile").value.trim();
     if (!shopName || !ownerName || !mobile) { alert("Fill all fields!"); return; }
 
-    // use shopName as unique shop ID for now
     shopID = shopName.replace(/\s+/g,"_");
 
-    // Save Shopkeeper registration to Firebase
     const shopRef = ref(db, `shops/${shopID}/info`);
     await set(shopRef, { shopName, ownerName, mobile });
 
-    // Show add item section
-    document.getElementById("addItemSection").style.display = "block";
+    addItemSection.style.display = "block";
     alert(`Registered as ${shopName}`);
   });
 
-  const addItemBtn = document.getElementById("addItemBtn");
-  addItemBtn.addEventListener("click", async () => {
-    if (!shopID) { alert("Register first!"); return; }
-
+  // --- Add Item ---
+  addItemBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
     const itemName = document.getElementById("itemName").value.trim();
-    const itemPrice = parseFloat(document.getElementById("itemPrice").value);
-    const itemQty = parseInt(document.getElementById("itemQty").value);
+    const itemPrice = document.getElementById("itemPrice").value.trim();
+    const itemQuantity = document.getElementById("itemQuantity").value.trim();
     const itemPhoto = document.getElementById("itemPhoto").value.trim();
 
-    if (!itemName || !itemPrice || !itemQty) { alert("Fill item fields!"); return; }
+    if (!itemName || !itemPrice || !itemQuantity) { alert("Fill all fields!"); return; }
 
-    const itemsRef = ref(db, `shops/${shopID}/items`);
-    const newItemRef = push(itemsRef);
-    await set(newItemRef, { name:itemName, price:itemPrice, quantity:itemQty, photo:itemPhoto });
+    const itemRef = push(ref(db, `shops/${shopID}/items`));
+    await set(itemRef, { itemName, itemPrice, itemQuantity, itemPhoto });
+    alert(`${itemName} added successfully!`);
 
-    document.getElementById("status").innerText = `${itemName} added successfully!`;
-    // Clear inputs
+    // Clear fields
     document.getElementById("itemName").value = "";
     document.getElementById("itemPrice").value = "";
-    document.getElementById("itemQty").value = "";
+    document.getElementById("itemQuantity").value = "";
     document.getElementById("itemPhoto").value = "";
   });
-
 </script>
 </body>
 </html>
-
