@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrabNGo – Customer</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f7f7f7;
+  }
+  header {
+    background: #0c831f;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .container {
+    max-width: 900px;
+    margin: auto;
+    padding: 16px;
+  }
+  h2 {
+    text-align: center;
+    color: #0c831f;
+  }
+  .shop-card {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 16px;
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .card {
+    background: white;
+    width: 140px;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 6px;
+  }
+  .card h4 {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+  .card p {
+    margin: 2px 0;
+    font-size: 12px;
+    color: #555;
+  }
+  button {
+    background: #0c831f;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .cart {
+    background: #fff;
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .cart h3 {
+    margin: 0 0 8px 0;
+  }
+  .cart-item {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .pickup {
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>GrabNGo – Customer</header>
+
+<div class="container">
+  <h2>Nearby Shop – <span id="shopNameDisplay"></span></h2>
+
+  <div class="grid" id="itemGrid">
+    <!-- Items will appear here -->
+  </div>
+
+  <div class="cart">
+    <h3>Your Cart</h3>
+    <div id="cartItems">
+      <p>No items added yet.</p>
+    </div>
+    <div class="pickup">
+      <label for="pickupTime">Select Pickup Time:</label>
+      <input type="time" id="pickupTime">
+      <button onclick="confirmOrder()">Confirm Order</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Sample shopkeeper data (replace with real shopkeeper items later)
+const shopName = localStorage.getItem('userName') || "Sample Shop";
+document.getElementById('shopNameDisplay').innerText = shopName;
+
+// Sample items array (these should come from shopkeeper dashboard)
+let items = [
+  { name: "Chini 1kg", price: 40, qty: 10, photo: "" },
+  { name: "Aata 5kg", price: 250, qty: 20, photo: "" },
+  { name: "Oil 1L", price: 120, qty: 15, photo: "" }
+];
+
+let cart = [];
+
+function updateGrid() {
+  const grid = document.getElementById('itemGrid');
+  grid.innerHTML = '';
+  items.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      ${item.photo ? `<img src="${item.photo}" alt="${item.name}">` : '<div style="height:100px; line-height:100px; color:#aaa; background:#f0f0f0; border-radius:6px;">No Image</div>'}
+      <h4>${item.name}</h4>
+      <p>₹${item.price}</p>
+      <p>Qty: ${item.qty}</p>
+      <button onclick="addToCart(${index})">Add to Cart</button>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function addToCart(index){
+  const item = items[index];
+  cart.push(item);
+  updateCart();
+}
+
+function updateCart(){
+  const cartDiv = document.getElementById('cartItems');
+  cartDiv.innerHTML = '';
+  if(cart.length === 0){
+    cartDiv.innerHTML = '<p>No items added yet.</p>';
+  } else {
+    cart.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerText = `${item.name} – ₹${item.price} – Qty: ${item.qty}`;
+      cartDiv.appendChild(div);
+    });
+  }
+}
+
+function confirmOrder(){
+  const pickup = document.getElementById('pickupTime').value;
+  if(cart.length === 0){
+    alert('Please add items to cart first!');
+    return;
+  }
+  if(!pickup){
+    alert('Please select pickup time!');
+    return;
+  }
+  alert(`Order confirmed! Pickup at ${pickup}.`);
+  cart = [];
+  updateCart();
+}
+
+updateGrid();
+</script>
+
+</body>
+</html>
