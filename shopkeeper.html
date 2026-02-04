@@ -49,6 +49,7 @@
 <body>
 <header>GrabNGo – Shopkeeper</header>
 <div class="container">
+
   <!-- Registration Section -->
   <div class="card">
     <h3>Register / Login</h3>
@@ -69,6 +70,7 @@
     <input type="text" id="itemPhoto" placeholder="Image URL (optional)"><br>
     <button id="addItemBtn" type="button">Add Item</button>
   </div>
+  
 </div>
 
 <!-- Firebase Scripts -->
@@ -76,6 +78,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
   import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
+  // Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDVicBX20W8dpR03nlRwLrqOscRS-s6l68",
     authDomain: "grabngo45n.firebaseapp.com",
@@ -97,7 +100,7 @@
 
   // --- Register / Login ---
   registerBtn.addEventListener("click", async (e) => {
-    e.preventDefault(); // <- prevents 404 / blank page
+    e.preventDefault(); // Prevent navigation / 404
     const shopName = document.getElementById("shopName").value.trim();
     const ownerName = document.getElementById("ownerName").value.trim();
     const mobile = document.getElementById("mobile").value.trim();
@@ -131,6 +134,7 @@
 
     const itemRef = push(ref(db, `shops/${shopID}/items`));
     await set(itemRef, { itemName, itemPrice, itemQuantity, itemPhoto });
+
     alert(`${itemName} added successfully!`);
 
     // Clear fields
