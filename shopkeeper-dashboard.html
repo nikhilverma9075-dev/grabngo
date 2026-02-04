@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDVicBX20W8dpR03nlRwLrqOscRS-s6l68",
+    authDomain: "grabngo45n.firebaseapp.com",
+    projectId: "grabngo45n",
+    storageBucket: "grabngo45n.firebasestorage.app",
+    messagingSenderId: "632627152888",
+    appId: "1:632627152888:web:cfa1db4ae7fb6d7a29b80d",
+    measurementId: "G-L0JVNV7XKG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script> <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopkeeper Dashboard – GrabNGo</title>
