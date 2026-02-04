@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GrabNGo – Packed before you arrive</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       margin: 0;
@@ -13,53 +14,94 @@
       background: #0c831f;
       color: white;
       padding: 16px;
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
       text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .tagline {
+      text-align: center;
+      margin: 6px 0 16px 0;
+      font-size: 14px;
+      color: #333;
     }
     .container {
       padding: 16px;
     }
-    .card {
+    .store-card, .pickup-card, .info-card {
       background: white;
       padding: 14px;
       margin-bottom: 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .store-card h3, .pickup-card h3, .info-card h3 {
+      margin: 0 0 6px 0;
+      font-size: 18px;
+    }
+    .store-card p, .pickup-card p, .info-card p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #555;
     }
     button {
       background: #0c831f;
       color: white;
       border: none;
       padding: 10px 14px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
+      margin-top: 6px;
+    }
+    .button-container {
+      text-align: right;
     }
   </style>
 </head>
 <body>
 
 <header>GrabNGo</header>
+<div class="tagline">Packed before you arrive</div>
 
 <div class="container">
-  <div class="card">
-    <h3>Nearby Kirana Store</h3>
-    <p>Distance: 120 meters</p>
-    <button>Add Items</button>
+
+  <!-- Nearby Store Card -->
+  <div class="store-card">
+    <h3>Mrs. Sharma's Kirana</h3>
+    <p>Distance: 50 meters</p>
+    <p>Pickup in ~15 min</p>
+    <div class="button-container">
+      <button>Add Items</button>
+    </div>
   </div>
 
-  <div class="card">
+  <div class="store-card">
+    <h3>Shivaji Kirana Store</h3>
+    <p>Distance: 120 meters</p>
+    <p>Pickup in ~20 min</p>
+    <div class="button-container">
+      <button>Add Items</button>
+    </div>
+  </div>
+
+  <!-- Pickup Time Card -->
+  <div class="pickup-card">
     <h3>Select Pickup Time</h3>
     <p>Example: 5:00 PM</p>
-    <button>Confirm Slot</button>
+    <div class="button-container">
+      <button>Confirm Slot</button>
+    </div>
   </div>
 
-  <div class="card">
+  <!-- Info Card -->
+  <div class="info-card">
     <h3>No Login. No OTP.</h3>
-    <p>Just enter your name and book.</p>
+    <p>Just enter your name and book your order. Quick & easy.</p>
   </div>
+
 </div>
 
 </body>
 </html>
+
