@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GrabNGo – Customer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#f7f7f7; }
+    header { background:#0c831f; color:white; padding:16px; font-size:22px; text-align:center; }
+    .container { padding:16px; display:flex; flex-wrap: wrap; gap:12px; justify-content:center; }
+    .card { background:white; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); width:150px; text-align:center; }
+    .card img { width:100%; height:100px; object-fit:cover; border-radius:5px; }
+    button { background:#0c831f; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; margin-top:5px; }
+    input[type=number] { width:50px; text-align:center; margin-top:5px; }
+    .no-items { text-align:center; margin-top:50px; font-size:18px; color:#555; }
+  </style>
+</head>
+<body>
+<header>GrabNGo – Nearby Store</header>
+
+<div class="container" id="itemsContainer"></div>
+<div class="no-items" id="noItems" style="display:none;">No items available in your locality.</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDVicBX20W8dpR03nlRwLrqOscRS-s6l68",
+    authDomain: "grabngo45n.firebaseapp.com",
+    projectId: "grabngo45n",
+    storageBucket: "grabngo45n.firebasestorage.app",
+    messagingSenderId: "632627152888",
+    appId: "1:632627152888:web:cfa1db4ae7fb6d7a29b80d",
+    measurementId: "G-L0JVNV7XKG"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const container = document.getElementById("itemsContainer");
+const noItemsDiv = document.getElementById("noItems");
+
+// Fetch all shops
+const shopsRef = ref(db, "shops");
+onValue(shopsRef, (snapshot) => {
+    container.innerHTML = "";
+    const shops = snapshot.val();
+    if (!shops) { noItemsDiv.style.display="block"; return; }
+    noItemsDiv.style.display="none";
+
+    Object.keys(shops).forEach(shopID => {
+        const shop = shops[shopID];
+        if (!shop.items) return;
+        Object.keys(shop.items).forEach(itemKey => {
+            const item = shop.items[itemKey];
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                <img src="${item.photo || 'https://via.placeholder.com/150'}" alt="${item.name}">
+                <h4>${item.name}</h4>
+                <p>₹${item.price}</p>
+                <input type="number" min="1" value="1" id="qty-${shopID}-${itemKey}">
+                <button onclick="addToCart('${shopID}', '${itemKey}', '${item.name}', ${item.price})">Add to Cart</button>
+            `;
+            container.appendChild(card);
+        });
+    });
+});
+
+window.addToCart = (shopID, itemKey, name, price) => {
+    const qty = document.getElementById(`qty-${shopID}-${itemKey}`).value;
+    alert(`${qty} x ${name} added to cart at ₹${price * qty}`);
+};
+</script>
+
+</body>
+</html>
+
+
+
