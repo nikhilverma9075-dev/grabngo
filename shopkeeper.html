@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>GrabNGo – Shopkeeper Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
@@ -53,24 +54,22 @@
   <!-- Registration Section -->
   <div class="card">
     <h3>Register / Login</h3>
-    <div>
-      <input type="text" id="shopName" placeholder="Shop Name"><br>
-      <input type="text" id="ownerName" placeholder="Owner Name"><br>
-      <input type="text" id="mobile" placeholder="Mobile Number"><br>
-      <button id="registerBtn" type="button">Register / Login</button>
-    </div>
+    <input type="text" id="shopName" placeholder="Shop Name">
+    <input type="text" id="ownerName" placeholder="Owner Name">
+    <input type="text" id="mobile" placeholder="Mobile Number">
+    <button id="registerBtn" type="button">Register / Login</button>
   </div>
 
   <!-- Add Item Section -->
   <div class="card" id="addItemSection">
     <h3>Add Item</h3>
-    <input type="text" id="itemName" placeholder="Item Name"><br>
-    <input type="number" id="itemPrice" placeholder="Price"><br>
-    <input type="number" id="itemQuantity" placeholder="Quantity"><br>
-    <input type="text" id="itemPhoto" placeholder="Image URL (optional)"><br>
+    <input type="text" id="itemName" placeholder="Item Name">
+    <input type="number" id="itemPrice" placeholder="Price">
+    <input type="number" id="itemQuantity" placeholder="Quantity">
+    <input type="text" id="itemPhoto" placeholder="Image URL (optional)">
     <button id="addItemBtn" type="button">Add Item</button>
   </div>
-  
+
 </div>
 
 <!-- Firebase Scripts -->
@@ -78,7 +77,6 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
   import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
-  // Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDVicBX20W8dpR03nlRwLrqOscRS-s6l68",
     authDomain: "grabngo45n.firebaseapp.com",
@@ -94,54 +92,56 @@
 
   let shopID = "";
 
-  const registerBtn = document.getElementById("registerBtn");
-  const addItemSection = document.getElementById("addItemSection");
-  const addItemBtn = document.getElementById("addItemBtn");
+  document.addEventListener("DOMContentLoaded", () => {
+    const registerBtn = document.getElementById("registerBtn");
+    const addItemSection = document.getElementById("addItemSection");
+    const addItemBtn = document.getElementById("addItemBtn");
 
-  // --- Register / Login ---
-  registerBtn.addEventListener("click", async (e) => {
-    e.preventDefault(); // Prevent navigation / 404
-    const shopName = document.getElementById("shopName").value.trim();
-    const ownerName = document.getElementById("ownerName").value.trim();
-    const mobile = document.getElementById("mobile").value.trim();
+    // --- Register / Login ---
+    registerBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const shopName = document.getElementById("shopName").value.trim();
+      const ownerName = document.getElementById("ownerName").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
 
-    if (!shopName || !ownerName || !mobile) {
-      alert("Fill all fields!");
-      return;
-    }
+      if (!shopName || !ownerName || !mobile) {
+        alert("Fill all fields!");
+        return;
+      }
 
-    shopID = shopName.replace(/\s+/g, "_");
+      shopID = shopName.replace(/\s+/g, "_");
 
-    const shopRef = ref(db, `shops/${shopID}/info`);
-    await set(shopRef, { shopName, ownerName, mobile });
+      const shopRef = ref(db, `shops/${shopID}/info`);
+      await set(shopRef, { shopName, ownerName, mobile });
 
-    addItemSection.style.display = "block";
-    alert(`Registered as ${shopName}`);
-  });
+      addItemSection.style.display = "block"; // show Add Item section
+      alert(`Registered as ${shopName}`);
+    });
 
-  // --- Add Item ---
-  addItemBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const itemName = document.getElementById("itemName").value.trim();
-    const itemPrice = document.getElementById("itemPrice").value.trim();
-    const itemQuantity = document.getElementById("itemQuantity").value.trim();
-    const itemPhoto = document.getElementById("itemPhoto").value.trim();
+    // --- Add Item ---
+    addItemBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const itemName = document.getElementById("itemName").value.trim();
+      const itemPrice = document.getElementById("itemPrice").value.trim();
+      const itemQuantity = document.getElementById("itemQuantity").value.trim();
+      const itemPhoto = document.getElementById("itemPhoto").value.trim();
 
-    if (!itemName || !itemPrice || !itemQuantity) {
-      alert("Fill all fields!");
-      return;
-    }
+      if (!itemName || !itemPrice || !itemQuantity) {
+        alert("Fill all fields!");
+        return;
+      }
 
-    const itemRef = push(ref(db, `shops/${shopID}/items`));
-    await set(itemRef, { itemName, itemPrice, itemQuantity, itemPhoto });
+      const itemRef = push(ref(db, `shops/${shopID}/items`));
+      await set(itemRef, { itemName, itemPrice, itemQuantity, itemPhoto });
 
-    alert(`${itemName} added successfully!`);
+      alert(`${itemName} added successfully!`);
 
-    // Clear fields
-    document.getElementById("itemName").value = "";
-    document.getElementById("itemPrice").value = "";
-    document.getElementById("itemQuantity").value = "";
-    document.getElementById("itemPhoto").value = "";
+      // Clear fields
+      document.getElementById("itemName").value = "";
+      document.getElementById("itemPrice").value = "";
+      document.getElementById("itemQuantity").value = "";
+      document.getElementById("itemPhoto").value = "";
+    });
   });
 </script>
 </body>
