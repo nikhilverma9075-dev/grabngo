@@ -31,6 +31,8 @@
       padding: 10px;
       margin: 6px 0;
       font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
     }
     button {
       background: #0c831f;
@@ -50,10 +52,12 @@
   <!-- Registration Section -->
   <div class="card">
     <h3>Register / Login</h3>
-    <input type="text" id="shopName" placeholder="Shop Name"><br>
-    <input type="text" id="ownerName" placeholder="Owner Name"><br>
-    <input type="text" id="mobile" placeholder="Mobile Number"><br>
-    <button id="registerBtn">Register / Login</button>
+    <div>
+      <input type="text" id="shopName" placeholder="Shop Name"><br>
+      <input type="text" id="ownerName" placeholder="Owner Name"><br>
+      <input type="text" id="mobile" placeholder="Mobile Number"><br>
+      <button id="registerBtn" type="button">Register / Login</button>
+    </div>
   </div>
 
   <!-- Add Item Section -->
@@ -63,8 +67,7 @@
     <input type="number" id="itemPrice" placeholder="Price"><br>
     <input type="number" id="itemQuantity" placeholder="Quantity"><br>
     <input type="text" id="itemPhoto" placeholder="Image URL (optional)"><br>
-    <button id="registerBtn" type="button">Register / Login</button>
-
+    <button id="addItemBtn" type="button">Add Item</button>
   </div>
 </div>
 
@@ -94,13 +97,17 @@
 
   // --- Register / Login ---
   registerBtn.addEventListener("click", async (e) => {
-    e.preventDefault(); // Prevent page refresh / 404
+    e.preventDefault(); // <- prevents 404 / blank page
     const shopName = document.getElementById("shopName").value.trim();
     const ownerName = document.getElementById("ownerName").value.trim();
     const mobile = document.getElementById("mobile").value.trim();
-    if (!shopName || !ownerName || !mobile) { alert("Fill all fields!"); return; }
 
-    shopID = shopName.replace(/\s+/g,"_");
+    if (!shopName || !ownerName || !mobile) {
+      alert("Fill all fields!");
+      return;
+    }
+
+    shopID = shopName.replace(/\s+/g, "_");
 
     const shopRef = ref(db, `shops/${shopID}/info`);
     await set(shopRef, { shopName, ownerName, mobile });
@@ -117,7 +124,10 @@
     const itemQuantity = document.getElementById("itemQuantity").value.trim();
     const itemPhoto = document.getElementById("itemPhoto").value.trim();
 
-    if (!itemName || !itemPrice || !itemQuantity) { alert("Fill all fields!"); return; }
+    if (!itemName || !itemPrice || !itemQuantity) {
+      alert("Fill all fields!");
+      return;
+    }
 
     const itemRef = push(ref(db, `shops/${shopID}/items`));
     await set(itemRef, { itemName, itemPrice, itemQuantity, itemPhoto });
